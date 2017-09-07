@@ -5,15 +5,20 @@ SUBDIRS = icons
 desktopdir = $(datadir)/applications
 desktop_in_files = glade.desktop.in.in
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
+$(desktop_DATA): $(desktop_in_files)
+	$(AM_V_GEN) $(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gladeui-2.0.pc
 
-@INTLTOOL_XML_RULE@
 appdatadir = $(datadir)/appdata
 appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 appdata_in_files = glade.appdata.xml.in
+$(appdata_DATA): $(appdata_in_files)
+	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
+
+itsdatadir = $(datadir)/gettext/its
+dist_itsdata_DATA = glade-catalog.its glade-catalog.loc
 
 EXTRA_DIST = 				\
 	$(appdata_in_files)		\
